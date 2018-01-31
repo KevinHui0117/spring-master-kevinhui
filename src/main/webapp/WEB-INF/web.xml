@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<!--从类路径下加载spring配置文件，classpath指类路径下加载-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:smart-context.xml</param-value>
+	</context-param>
+	<!--配置spring的ContextLoaderListener的web容器监听器，该监听器引用<context-param>中的参数
+	     在web容器启动时自动运行
+	    作用是获取Spring配置文件，并启动spring容器
+	-->
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<!--配置springMVC的主控servlet: DispatcherServlet-->
+	<!--此处的servlet名称为smart，则在webapp（/WEB-INF）目录下必须有一个smart-servlet.xml的springMVC配置文件-->
+    <!--SpringMVC会自动将servlet.xml service.xml和dao.xml文件进行拼装-->
+	<servlet>
+        <servlet-name>smart</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    <!--配置springMVC可以截获的URL后缀名-->
+    <!--请求被springMVC截获后，首先根据截获到的url查找到目标的处理控制器，
+                               并将请求参数 封装“命令”对象一起传给控制器处理
+                               然后控制器调用Spring容器中的业务Bean完成业务处理工作
+                               并返回结果视图-->
+    <servlet-mapping>
+        <servlet-name>smart</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+</web-app>
